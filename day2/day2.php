@@ -1,7 +1,7 @@
 <?php
 function _retriever($url, $data = NULL, $header = NULL, $method = 'GET')
 {
-    $cookie_file_path = dirname(__FILE__) . "/cookie/techinasia.txt";
+    $cookie_file_path = dirname(__FILE__) . "/cookie/farmrpg.txt";
     $datas['http_code'] = 0;
     if ($url == "")
         return $datas;
@@ -56,36 +56,31 @@ function _retriever($url, $data = NULL, $header = NULL, $method = 'GET')
     return $datas;
 }
 
-$html = _retriever('https://mercuryfm.id/');
-// print_r($html['result']);
+function fishing(){
+    $header = array(
+        'origin: https://farmrpg.com',
+        'referer: https://farmrpg.com/index.php',
+    );
+    $html = _retriever('https://farmrpg.com/worker.php?go=fishcaught&id=1&r=411573',NULL, $header ,'POST');
+    return $html;
+}
 
-$t_start = strpos($html['result'], '<div class="jeg_block_container">');
-// print_r($t_start);
-$t_html = substr($html['result'], $t_start);
-// print_r($t_html);
+function explore(){
+    $header = array(
+        'origin: https://farmrpg.com',
+        'referer: https://farmrpg.com/index.php',
+    );
+    $html = _retriever('https://farmrpg.com/worker.php?go=explore&id=1',NULL, $header ,'POST');
+    return $html;
+}
 
-//link
-$t_link_start = strpos($t_html,'<a href=')+9;
-$t_link_end = strpos($t_html,'005/" >')+4;
-$t_link_len = $t_link_end - $t_link_start;
-$link = substr($t_html, $t_link_start, $t_link_len);
-print_r($link. '<br>');
+function auto(){
+    $data=array();
+    $data['fishing']= fishing();
+    $data['explore']= explore();
 
-//image
-$t_img_start = strpos($t_html,'data-src="')+10;
-$t_img_end = strpos($t_html,'<div class="lazyloaded"')-28;
-$t_img_length = $t_img_end - $t_img_start;
-$img = substr($t_html, $t_img_start, $t_img_length);
-print_r($img. '<br>');
+    return json_encode($data);
+}
 
-//title
-$t_title_start = strpos($t_html,'7005/">')+7;
-$t_title_end = strpos($t_html,'<div class="jeg_post_meta">')-75;
-$t_title_length = $t_title_end - $t_title_start;
-$title= substr($t_html, $t_title_start, $t_title_length);
-print_r($title. '<br>');
-
-//detail
-$h_html = _retriever($link);
-print_r($h_html);
-
+$result = explore();
+print_r($result);
