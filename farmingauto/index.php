@@ -8,30 +8,27 @@
     <title>Farm RPG AutoFarming</title>
 </head>
 <body>
-    
+    <script>
+        $(document).ready(function(){
+            console.log('work!');
+            function autofarm(){
+                var url = 'farmrpg.php';
+                $.ajax({
+                    type: "GET",
+                    dataType: "json",
+                    url: url,
+                    contentType: "application/json; charset=utf-8",
+                    success: function(data){
+                        console.log(data);
+                        setTimeout(autofarm, 61000);
+                    },
+                    error: function(xhr, status, error){
+                        console.log(error);
+                    }
+                });
+            }
+            autofarm();
+        });
+    </script>
 </body>
 </html>
-
-<script>
-    $(document).ready(function(){
-        console.log('work!');
-        
-        function autofarm(){
-            var url = 'farmrpg.php';
-            request = $.ajax({
-                type: "GET",
-                dataType:"json",
-                URL: url,
-                contentType: "application/json; charset=utf-8",
-                success: function(data){
-                    console.log(data);
-                    setTimeout(autofarm, 61000); 
-                },
-                error: function(e){
-                    console.log(e.message); 
-                }
-            });
-        }
-        autofarm();
-    })
-</script>
